@@ -1,0 +1,16 @@
+Report#6
+제목: JavaCC를 이용한 StraightLine Parser Visitor 만들기
+  
+제출일: 2019년 12월22일(일)
+
+문제 정의: StraightLineVisit에서 straight.line.visit를 수정, 새로운 Visitor
+VisitorJSONBuild를 만든다.
+즉 AST를 JSON으로 만든다.
+예)
+PlusExp(Exp e1, Exp e2)
+{"PlusExp":{"Exp":e1, "Exp":e2}}
+StatementList(){Statement*}
+{"StatementList":[s0, s1, ... sn]}
+
+
+Sample File -- sample-input.txt

@@ -1,0 +1,12 @@
+Report#3
+제목: Flex로  MiniJava Lexer 프로그램 minijava.lex 작성
+  
+제출일: 2020년 11월01일(일)
+
+Flex로 작성된 minijava Lexer 프로그램 minijava.lex 에 다음 기능이 추가 되도록
+수정
+
+1. Floating Point literal(FLOATLIT)
+   예) 1. 1.23 .123 1e1 1E-1 1.23E+123
+2. 1..10을 INTLIT(1), DOTDOT, INTLIT(10) 이라는 세개의 token으로 만든다.
+3. MiniJavaFlex1 project의 test.txt를 추가로 돌려 볼 것.
