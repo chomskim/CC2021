@@ -1,0 +1,39 @@
+Eclipse CDT와 MinGW 설정
+
+Eclipse CDT를 다운 받아 C:\pub\eclipse에 설치(64bit, 32bit 상관 없음)
+
+http://sourceforge.net/projects/mingw/files/Installer/에서
+Download mingw-get-setup.exe (86.5 kB)를 다운 받아 설치
+mingw-get.exe를 먼저 Graphic UI로 install하고, mungw-get을 다시 돌린다.
+설치 위치 C:\MinGW
+
+Eclipse 설정
+Window->Preference->C/C++->New C/C++ Project Wizard
+Preferred Toolchain Tab				Toolchain
+	Executable			
+		Empty Project 					MinGW GCC
+		
+									Make toolchain(s) Preferred
+
+
+HelloWorld Project 설정
+HelloWorld(Right Click)
+->Properties->C/C++ Build
+
+->Setting Tool Setting 확인 MinGW C++ Linker g++
+->Build Variable
+	MINGW_HOME	C:\MinGW
+	MSYS_HOME	C:\MinGW\msys\1.0
+->Environment
+	MINGW_HOME	C:\MinGW
+	MSYS_HOME	C:\MinGW\msys\1.0
+	PATH		${MINGW_HOME}\bin;${MSYS_HOME}\bin;추가
+
+
+제어판->시스템->고급시스템설정->환경변수->시스템변수
+Path Edit C:\MinGW\bin 추가
+Path 변수값 수정 후 eclipse 다시 시작.
+
+flex, bison 사용
+MinGW를 설치하면 C:\MinGw\msys\1.0\bin에 flex와 bison이 있다.
+링크에서 -lfl을 해줘야 하는데,해당 lib는 C:\pub\MinGw\msys\1.0\lib 이다
