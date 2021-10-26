@@ -1,0 +1,8 @@
+String	getAuthority()
+String 	getFragment() 
+String 	getHost() 
+String 	getPath() 
+int 	getPort() 
+String 	getQuery() 
+String 	getScheme() 
+String 	getUserInfo() 

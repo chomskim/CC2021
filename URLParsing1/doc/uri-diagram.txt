@@ -1,0 +1,22 @@
+  foo://username:password@example.com:8042/over/there/index.dtb?type=animal&name=narwhal#nose
+  \_/   \_______________/ \_________/ \__/            \___/ \_/ \______________________/ \__/
+   |           |               |       |                |    |            |                |
+   |       userinfo         hostname  port              |    |          query          fragment
+   |    \________________________________/\_____________|____|/ \__/        \__/
+   |                    |                          |    |    |    |          |
+scheme              authority                    path   |    |    interpretable as keys
+ name   \_______________________________________________|____|/       \____/     \_____/
+   |                         |                          |    |          |           |
+   |                 hierarchical part                  |    |    interpretable as values
+   |                                                    |    |
+   |            path               interpretable as filename |
+   |   ___________|____________                              |
+  / \ /                        \                             |
+  urn:example:animal:ferret:nose               interpretable as extension
+
+ scheme
+  name  userinfo  hostname       query
+  _|__   ___|__   ____|____   _____|_____
+ /    \ /      \ /         \ /           \
+ mailto:username@example.com?subject=Topic
+ 
