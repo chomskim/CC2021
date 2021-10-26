@@ -2,6 +2,7 @@ Report#2
 
 제목: Automata 를 이용한 Lexical analyzer(Scanner) 만들기 
 제출마감: 2021년 11월 1일(월)
+src folder zip 해서 제출
 
 1. MiniJava Syntax -- Lecture-info/minijava/MiniJavaBNF.pdf(txt) 참조
 2. MiniJavaLexCPP1 Project 참조 (input:binarytree.java, output:binarytree.tok)
