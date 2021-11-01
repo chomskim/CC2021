@@ -1,0 +1,5 @@
+a=100.456
+b=123.
+print a+b
+c=-123e-1
+print -a+b+c
