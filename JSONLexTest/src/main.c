@@ -16,31 +16,32 @@ int yylex(); /* prototype for the lexing function */
 
 
 string toknames[] = {
-"STRING", "NUMBER", "COMMA", "COLON", "LBRACK",
-"RBRACK", "LBRACE", "RBRACE", "TRUE", "FALSE", "NULL"
+		"STRING", "NUMBER", "COMMA", "COLON", "LBRACK",
+		"RBRACK", "LBRACE", "RBRACE", "TRUE", "FALSE", "NULL",
+		"STRING_IDENT"
 };
 
 string tokname(tok) {
-  return tok<257 || tok>302 ? "BAD_TOKEN" : toknames[tok-257];
+	return tok<257 || tok>302 ? "BAD_TOKEN" : toknames[tok-257];
 }
 
 int main(int argc, char **argv)
 {
-   string fname; int tok;
-   //if (argc!=2) {fprintf(stderr,"usage: a.out filename\n"); exit(1);}
-   fname="test.json";
-   EM_open(fname);
-   for(;;) {
-      tok=yylex();
-      if (tok==0) break;
-      switch(tok) {
-      case STRING: case NUMBER:
-         printf("%s (%s)\n",tokname(tok),yylval.sval);
-         break;
-      default:
-         printf("%s \n",tokname(tok));
-      }
-   }
-   return 0;
+	string fname; int tok;
+	//if (argc!=2) {fprintf(stderr,"usage: a.out filename\n"); exit(1);}
+	fname="test.json";
+	EM_open(fname);
+	for(;;) {
+		tok=yylex();
+		if (tok==0) break;
+		switch(tok) {
+		case STRING: case NUMBER: case STRING_IDENT:
+			printf("%s (%s)\n",tokname(tok),yylval.sval);
+			break;
+		default:
+			printf("%s \n",tokname(tok));
+		}
+	}
+	return 0;
 }
 

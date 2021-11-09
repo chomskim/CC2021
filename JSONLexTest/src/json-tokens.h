@@ -14,4 +14,5 @@ extern YYSTYPE yylval;
 # define _TRUE 265
 # define _FALSE 266
 # define _NULL 267
+# define STRING_IDENT 268
 

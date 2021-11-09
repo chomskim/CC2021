@@ -8,6 +8,7 @@ typedef char bool;
 
 void *checked_malloc(int);
 string String(char *);
+string String1(char *s);
 
 #define BUFMAX 1000
 extern char strbuf[];

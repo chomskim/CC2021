@@ -24,6 +24,17 @@ string String(char *s)
 	strcpy(p,s);
 	return p;
 }
+string String1(char *s)
+{
+	int slen = strlen(s);
+	string p = checked_malloc(strlen(s));
+	int i = 0;
+	for (i=0; i<slen; ++i) {
+		p[i] = s[i];
+	}
+	p[slen-1] = '\0';
+	return p;
+}
 
 char strbuf[BUFMAX];
 int  bufptr;
