@@ -22,23 +22,23 @@ string tokname(int tok) {
 }
 
 int tok;
-int VALUE_FIRST[] = { LBRACE, LBRACK, STRING, NUMBER, _TRUE, _FALSE, _NULL};
+int FIRST_VALUE[] = { LBRACE, LBRACK, STRING, NUMBER, _TRUE, _FALSE, _NULL};
 
 int isFIRST(int tok) {
 	int i;
 	for (i=0; i<7; i++) {
-		if (tok == VALUE_FIRST[i]) {
-			return i+1;
+		if (tok == FIRST_VALUE[i]) {
+			return TRUE;
 		}
 	}
-	return 0;
+	return FALSE;
 }
 void yyerror (char* s) {
 	printf ("*** Error: %s\n", s);
 }
 void json (void) {
 	value ();
-	printf ("END\n");
+	//printf ("END\n");
 }
 void value(void){
 	if (tok==LBRACE) { // tok=={
