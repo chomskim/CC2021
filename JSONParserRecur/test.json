@@ -10,6 +10,7 @@
     },
     "Animated": false,
     "IDs": [0, 116, 943, 234, 38793],
+    "Names": ["kim", "lee", "ko", "yo", "ko yo"],
     "Averages": [123., 1e100, 0.99],
     "empty list": []
   },

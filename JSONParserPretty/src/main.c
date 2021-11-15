@@ -23,7 +23,7 @@ string tokname(int tok) {
 }
 
 int tok;
-int FIRST_VALUE[] = { LBRACE, LBRACK, STRING, NUMBER, _TRUE, _FALSE, _NULL};
+int FIRST_VALUE[] = { LBRACE, LBRACK, STRING, STRING_IDENT, NUMBER, _TRUE, _FALSE, _NULL};
 
 int isFIRST(int tok) {
 	int i;
