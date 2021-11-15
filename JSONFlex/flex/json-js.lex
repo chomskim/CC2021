@@ -7,7 +7,7 @@
 extern int atoi(const char*);
 %}
 
-%start C S
+%start C S S0
 
 digit		[0-9]
 integer		{digit}+
@@ -32,11 +32,12 @@ ws			[\ \t]
 <INITIAL>null			{ return _NULL; }
 <INITIAL>true			{ return _TRUE; }
 
-<INITIAL>\"				{ BEGIN S; clearbuf(); continue; }
-<S>[_$a-zA-Z][_$a-zA-Z0-9]*\"		{
+<INITIAL>\"				{ BEGIN S0; clearbuf(); continue; }
+<S0>[_$a-zA-Z][_$a-zA-Z0-9]*\"		{
 							BEGIN INITIAL; yylval.sval = String1(yytext);
 							return STRING_IDENT;
 						}
+<S0>.					{ BEGIN S; unput(yytext[0]); }
 <S>[^"\\\n]				{ putbuf(yytext[0]); continue; }
 <S>\"					{ BEGIN INITIAL; yylval.sval = String(strbuf);
 		  					return STRING;

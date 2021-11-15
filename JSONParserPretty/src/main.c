@@ -37,6 +37,15 @@ int isFIRST(int tok) {
 void yyerror (char* s) {
 	printf ("*** Error: %s\n", s);
 }
+
+int indent = 0;
+void printNewLine(){
+	printf("\n");
+	for (int i=0;i<indent; ++i) {
+		printf("  ");
+	}
+}
+
 void json (void) {
 	value ();
 	//printf ("END\n");
@@ -79,9 +88,12 @@ void value(void){
 void object(void) {
 	if (tok==LBRACE) { // tok=={
 		printf("{");
+		indent+=1;
 		tok = yylex();
 		members();
 		if (tok==RBRACE) { // tok==}
+			indent-=1;
+			printNewLine();
 			printf("}");
 			tok = yylex();
 		}
@@ -97,17 +109,18 @@ void object(void) {
 void members (void) {
 	member ();
 	while (tok == COMMA) {
-		printf(",");
+		printf(", ");
 		tok = yylex ();
 		member ();
 	}
 }
 void member (void) {
 	if (tok == STRING) {
+		printNewLine();
 		printf("\"%s\"",yylval.sval);
 		tok = yylex();
 		if (tok == COLON) {
-			printf(":");
+			printf(": ");
 			tok = yylex();
 			value();
 		}
@@ -116,10 +129,11 @@ void member (void) {
 		}
 	}
 	else if (tok == STRING_IDENT) {
+		printNewLine();
 		printf("%s",yylval.sval);
 		tok = yylex();
 		if (tok == COLON) {
-			printf(":");
+			printf(": ");
 			tok = yylex();
 			value();
 		}
@@ -134,9 +148,12 @@ void member (void) {
 void array (void) {
 	if (tok == LBRACK) {
 		printf("[");
+		indent+=1;
 		tok = yylex();
 		values0();
 		if (tok == RBRACK) {
+			indent-=1;
+			printNewLine();
 			printf("]");
 			tok = yylex();
 		}
@@ -154,16 +171,18 @@ void values0 () {
 	}
 }
 void values() {
+	printNewLine();
 	value ();
 	while (tok == COMMA) {
 		printf(",");
+		printNewLine();
 		tok = yylex ();
 		value ();
 	}
 }
 
 int main (void) {
-	string fname ="test.json";
+	string fname ="test1.json";
 
 	EM_open(fname);
 	tok = yylex ();
