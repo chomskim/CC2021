@@ -1,0 +1,15 @@
+Program(StatementList)
+StatementList(){Statement*}
+Statement()
+   AssignStatement(String id, Exp exp)
+   PrintStatement(PExpList elist)
+PExpList(){Exp*}
+Exp()
+   CompExp(StatementList slist, Exp exp)
+   DivideExp(Exp e1, Exp e2)
+   MinusExp(Exp e1, Exp e2)
+   PlusExp(Exp e1, Exp e2)
+   TimesExp(Exp e1, Exp e2)
+   IdentExp(String id)
+   NumberExp(String num)
+

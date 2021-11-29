@@ -1,0 +1,12 @@
+program     : statements <EOF>
+statements  : statement ( statement | ";" statement )*
+statement   : IDENT "=" expression
+            | PRINT "(" (expressions)? ")"
+expressions : expression ("," expression )*
+expression  : "(" statements1 "," expression ")"
+            | term ( "+" term | "-" term )*
+statements1 : statement (";" statement )*
+term        : factor ( "*" factor | "/" factor )*
+factor      : IDENT 
+            | NUMBER
+            | "(" expression ")" 
