@@ -1,0 +1,10 @@
+hi=10;
+ho=200;
+print(hi, ho, hi+ho);
+a=(a=1;b=2,a+b);
+print(a);
+a=(a=(a=(a=1,a+1),a+1),a+1);
+print(a);
+a=1;b=2;print(a,b,a+b)
+a=(c=3;d=4,a+b+c+d)
+print(a)

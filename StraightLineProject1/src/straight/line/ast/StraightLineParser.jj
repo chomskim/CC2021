@@ -1,0 +1,175 @@
+/*
+ *	StraightLine program Interpreter Using JacaCC
+ *	Programmed By cskim, cse, hufs.ac.kr
+ *	2012.10.5
+ *	Copy Right -- Free for Educational Purpose
+ */
+options
+{
+  static = false;
+}
+
+PARSER_BEGIN(StraightLineParser)
+package straight.line.ast;
+
+import java.io.FileInputStream;
+import java.io.IOException;
+
+public class StraightLineParser {
+
+	static Environment env = new Environment();
+	static Program prog = null;
+	
+  	public static void main(String[] args) throws IOException
+  	{
+    	StraightLineParser slParser = 
+    		new StraightLineParser(new FileInputStream("sample-input.txt"));
+
+      	try {
+        	prog = slParser.program();
+        	System.out.println("Parsing successfully Ends.");
+        	prog.eval(env);
+        	System.out.println("Evaluation successfully Ends.");
+      	}
+      	catch(ParseException e){
+        	System.out.println("***Encountered errors during parse.");
+        	e.printStackTrace();
+      	}
+	}
+}
+
+PARSER_END(StraightLineParser)
+
+SKIP :
+{
+  " "
+| "\r"
+| "\t"
+| "\n"
+}
+
+TOKEN :
+{
+	< PRINT : 		"print"> 
+}
+
+TOKEN :
+{
+  < IDENT : (< LETTER >)(< LETTER >|< DIGIT >)* >
+| < NUMBER: (< DIGIT >)+ "." (< DIGIT >)* (<EXPONENT>)? 
+   			| "." (< DIGIT >)+ (<EXPONENT>)? 
+   			| (< DIGIT >)+ (<EXPONENT>)? >
+| < #EXPONENT: 		["e","E"] (["+","-"])? (< DIGIT >)+>
+| < #DIGIT : ["0"-"9"] >
+| < #LETTER : ["a"-"z"]|["A"-"Z"]|"_">
+}
+
+TOKEN : 
+{
+	< ASSIGN : 		"="> 
+| 	< LPAREN : 		"("> 
+| 	< RPAREN : 		")"> 
+| 	< COMMA: 		","> 
+| 	< SEMI : 		";">
+|  	< PLUS: 		"+">
+|  	< MINUS: 		"-">
+|  	< TIMES: 		"*">
+|  	< DIVIDE: 		"/" >
+|  	< ERROR: 		~[]>  // matches any single character
+}
+
+Program program():
+{
+	StatementList stmtList;
+}
+{
+	stmtList=statements() <EOF>	{
+  		System.out.println("Parse END");
+  		return new Program(stmtList);
+	}
+}
+StatementList statements():
+{
+	StatementList stmtList = new StatementList();
+	Statement st1, st2, st3;
+}
+{
+   	st1=statement() {stmtList.addStatement(st1);}
+   	(st2=statement() {stmtList.addStatement(st2);}
+   	| ";" st3=statement() {stmtList.addStatement(st3);})*
+   	{ return stmtList; }
+}
+Statement statement():
+{
+  Exp exp;
+  Token id;
+  PExpList elist = new PExpList();
+}
+{
+  id = < IDENT > "=" exp = expression()  { return new AssignStatement(id.image, exp); }
+| < PRINT > "(" [elist=expressions()] ")"
+  {	return new PrintStatement(elist); }
+}
+PExpList expressions():
+{
+  Exp exp1;
+  Exp exp2;
+  PExpList elist = new PExpList();
+}
+{  exp1 = expression()  { elist.addExp(exp1);}
+  ("," exp2 = expression() { elist.addExp(exp2);} )*
+  { return elist; }
+}
+StatementList statements1():
+{
+	StatementList stmtList = new StatementList();
+	Statement st1;
+	Statement st2;
+}
+{
+  st1=statement() { stmtList.addStatement(st1); }
+  (";" st2=statement() { stmtList.addStatement(st2); })*
+  { return stmtList; }
+}
+Exp expression():
+{
+  StatementList slist;
+  Exp temp;
+  Exp t1;
+}
+{
+  LOOKAHEAD(3) "(" slist=statements1() "," temp = expression() ")"
+  { return new CompExp(slist, temp); }
+  | temp = term() 
+    ( "+" t1=term() 
+  	  { temp = new PlusExp(temp, t1); } 
+    | "-" t1=term() 
+  	  { temp = new MinusExp(temp, t1); })*
+  { return temp; }
+}
+Exp term():
+{
+  Exp temp;
+  Exp t1;
+}
+{  temp = factor() 
+    ( "*" t1=factor() 
+      { temp = new TimesExp(temp, t1); } 
+    | "/" t1=factor() 
+      { temp = new DivideExp(temp, t1); })*
+  { return temp; }
+}
+Exp factor():
+{ 
+  Token tok; 
+  Exp temp; 
+}
+{
+  tok = <IDENT> 
+  { return new IdentExp(tok.image); }
+| tok = <NUMBER>
+  { return new NumberExp(tok.image); }
+| "(" temp = expression() ")" 
+  { return temp; }
+}
+    

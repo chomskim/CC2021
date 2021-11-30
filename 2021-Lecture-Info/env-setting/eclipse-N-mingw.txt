@@ -37,3 +37,9 @@ Path 변수값 수정 후 eclipse 다시 시작.
 flex, bison 사용
 MinGW를 설치하면 C:\MinGw\msys\1.0\bin에 flex와 bison이 있다.
 링크에서 -lfl을 해줘야 하는데,해당 lib는 C:\pub\MinGw\msys\1.0\lib 이다
+
+
+JavaCC
+Eclipse Marketplace에서 JavaCC plugin을 Install한다
+
+

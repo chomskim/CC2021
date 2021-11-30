@@ -1,0 +1,187 @@
+/*
+ *	StraightLine program Interpreter Using JacaCC
+ *	Programmed By cskim, cse, hufs.ac.kr
+ *	2012.10.5
+ *	Copy Right -- Free for Educational Purpose
+ */
+options
+{
+  static = false;
+}
+
+PARSER_BEGIN(StraightLineParser)
+package straight.line.calcul;
+
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.HashMap;
+
+public class StraightLineParser {
+
+	HashMap<String, Double > identValueMap = new HashMap<String, Double >();
+	ArrayList<Double> printList = new ArrayList<Double>();
+  	public static void main(String[] args) throws IOException
+  	{
+    	StraightLineParser slParser = new StraightLineParser(System.in);
+
+      	try {
+        	slParser.program();
+        	System.out.println("Calculator successfully Ends.");
+      	}
+      	catch(ParseException e){
+        	System.out.println("***Encountered errors during parse.");
+        	e.printStackTrace();
+      	}
+	}
+}
+
+PARSER_END(StraightLineParser)
+
+SKIP :
+{
+  " "
+| "\r"
+| "\t"
+| "\n"
+}
+
+TOKEN :
+{
+	< PRINT : 		"print"> 
+}
+
+TOKEN :
+{
+  < IDENT : (< LETTER >)(< LETTER >|< DIGIT >)* >
+| < NUMBER: (< DIGIT >)+ "." (< DIGIT >)* (<EXPONENT>)? 
+   			| "." (< DIGIT >)+ (<EXPONENT>)? 
+   			| (< DIGIT >)+ (<EXPONENT>)? >
+| < #EXPONENT: 		["e","E"] (["+","-"])? (< DIGIT >)+>
+| < #DIGIT : ["0"-"9"] >
+| < #LETTER : ["a"-"z"]|["A"-"Z"]|"_">
+}
+
+TOKEN : 
+{
+	< ASSIGN : 		"="> 
+| 	< LPAREN : 		"("> 
+| 	< RPAREN : 		")"> 
+| 	< COMMA: 		","> 
+| 	< SEMI : 		";">
+|  	< PLUS: 		"+">
+|  	< MINUS: 		"-">
+|  	< TIMES: 		"*">
+|  	< DIVIDE: 		"/" >
+|  	< ERROR: 		~[]>  // matches any single character
+}
+/*
+program     : statements <EOF>
+statements  : statement ( statement | ";" statement )*
+statement   : IDENT "=" expression
+            | PRINT "(" (expressions)? ")"
+expressions : expression ("," expression )*
+expression  : "(" statements1 "," expression ")"
+            | term ( "+" term | "-" term )*
+statements1 : statement (";" statement )*
+term        : factor ( "*" factor | "/" factor )*
+factor      : IDENT 
+            | NUMBER
+            | "(" expression ")" 
+*/
+void program():
+{}
+{
+	statements() <EOF>
+	{
+  		System.out.println("END");
+	}
+}
+void statements():
+{}
+{
+  statement() (statement()| ";" statement())*
+}
+void statement():
+{
+  double exp;
+  Token id;
+}
+{
+  id = < IDENT > "=" exp = expression()
+  {
+    identValueMap.put(id.image, new Double(exp));
+  }
+| < PRINT > "(" [expressions()] ")"
+  {
+    for (Double val:printList)
+    {
+      System.out.print(val+" ");
+    }
+    System.out.println();
+    printList.clear();
+  }
+}
+void expressions():
+{
+  double exp1;
+  double exp2;
+}
+{
+  exp1 = expression()
+  {
+    printList.add(new Double(exp1));
+  }
+  ("," exp2 = expression() {printList.add(new Double(exp2));} )*
+}
+void statements1():
+{}
+{
+  statement() (";" statement())*
+}
+double expression():
+{
+  double temp;
+  double t1;
+}
+{
+  temp = term() ( "+" t1=term() { temp+=t1; } 
+                | "-" t1=term() { temp-=t1; })*
+  { return temp; }
+}
+double term():
+{
+  double temp;
+  double t1;
+}
+{
+  temp = factor() ( "*" t1=factor() { temp*=t1; } 
+                  | "/" t1=factor() { temp/=t1; })*
+  { return temp; }
+}
+double factor():
+{ 
+  Token tok; 
+  double temp; 
+}
+{
+  tok = <IDENT> 
+  { 
+    Double res = identValueMap.get(tok.image);
+    if (res==null)
+       return 0;
+    else
+       return res.doubleValue();
+  }
+| tok = <NUMBER>
+  { 
+	return Double.parseDouble(tok.image);
+  }
+| LOOKAHEAD(3) "(" statements1() "," temp = expression() ")"
+  { return temp; }
+| "(" temp = expression() ")" 
+  { 
+    return temp;
+  }
+}
+
+    
